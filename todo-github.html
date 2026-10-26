@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مهامي</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f5f9; --surface:#ffffff; --text:#1c2033; --muted:#6b7089; --line:#dfe2ec;
+  --accent:#3a47c4; --accent-ink:#ffffff; --ok:#1d7a4f; --warn:#b3261e; --done:#9aa0b8;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#12141f; --surface:#1b1e2d; --text:#e8eaf4; --muted:#9298b3; --line:#2b2f45;
+    --accent:#7d8aff; --accent-ink:#12141f; --ok:#5fd09a; --warn:#ff8a80; --done:#6a708c;}
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));line-height:1.6}
+main{max-width:560px;margin:0 auto}
+h1{font-size:1.5rem;font-weight:600;margin:8px 0 4px}
+p.sub{margin:0 0 20px;color:var(--muted);font-size:.95rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+label{display:block;font-size:.9rem;font-weight:500;margin:14px 0 6px}
+input[type=text],input[type=password],input[type=date]{width:100%;font:inherit;color:var(--text);background:var(--bg);
+  border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.hint{font-size:.82rem;color:var(--muted);margin:6px 0 0}
+.hint a{color:var(--accent)}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:10px 14px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:disabled{opacity:.55;cursor:default}
+.row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.row>button{flex:1}
+.msg{margin-top:12px;font-size:.9rem;min-height:1.2em}
+.msg.err{color:var(--warn)} .msg.ok{color:var(--ok)}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.status{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.status.saved .dot{background:var(--ok)} .status.saving .dot{background:var(--accent)} .status.error .dot{background:var(--warn)}
+.add{display:flex;gap:8px;margin:18px 0 8px}
+.add input[type=text]{flex:1}
+.add button{padding:0 18px}
+.due-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:.88rem;color:var(--muted)}
+.due-row input{width:auto;padding:7px 10px}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tabs button{flex:1;padding:8px;font-size:.9rem}
+.tabs button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+li{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+li .box{width:22px;height:22px;flex:none;accent-color:var(--accent)}
+li .body{flex:1;min-width:0}
+li .t{word-break:break-word}
+li.done .t{text-decoration:line-through;color:var(--done)}
+li .d{font-size:.8rem;color:var(--muted)}
+li .d.late{color:var(--warn)}
+li .x{border:none;background:none;color:var(--muted);padding:6px 8px;font-size:1.2rem;line-height:1}
+.empty{text-align:center;color:var(--muted);padding:28px 8px}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;font-size:.85rem;color:var(--muted)}
+.foot button{border:none;background:none;color:var(--muted);text-decoration:underline;padding:4px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: no-preference){ li{transition:opacity .15s} }
+</style>
+</head>
+<body>
+<main>
+
+<!-- شاشة الإعداد -->
+<section id="setup" hidden>
+  <h1>مهامي</h1>
+  <p class="sub">كل مهمة بتتسجل تلقائياً في ريبو خاص (Private) على حسابك في GitHub.</p>
+  <div class="card">
+    <label for="token">GitHub Token</label>
+    <input id="token" type="password" autocomplete="off" placeholder="github_pat_…">
+    <p class="hint">من GitHub: Settings ← Developer settings ← Personal access tokens ← Fine-grained. اديله صلاحية <b>Contents: Read and write</b> على الريبو بس. (لو هتنشئ الريبو من هنا، استخدم Classic token بصلاحية <b>repo</b>.)</p>
+
+    <label for="repo">اسم الريبو</label>
+    <input id="repo" type="text" dir="ltr" placeholder="username/my-todo-data" autocapitalize="off" autocorrect="off">
+    <p class="hint">لو الريبو مش موجود، دوس «إنشاء ريبو خاص» وهيتعمل Private تلقائياً.</p>
+
+    <div class="row">
+      <button class="primary" id="connect">اتصال</button>
+      <button id="create">إنشاء ريبو خاص</button>
+    </div>
+    <div id="setupMsg" class="msg" role="status"></div>
+    <p class="hint">التوكن بيتحفظ على جهازك بس (في المتصفح) ومبيتبعتش لأي مكان غير GitHub.</p>
+  </div>
+</section>
+
+<!-- شاشة المهام -->
+<section id="app" hidden>
+  <header>
+    <div>
+      <h1>مهامي</h1>
+      <div id="status" class="status"><span class="dot"></span><span id="statusText">—</span></div>
+    </div>
+  </header>
+
+  <form class="add" id="addForm" onsubmit="return false">
+    <input id="newTask" type="text" placeholder="اكتب مهمة جديدة" aria-label="مهمة جديدة" autocomplete="off">
+    <button class="primary" id="addBtn" type="submit">إضافة</button>
+  </form>
+  <div class="due-row"><label for="newDue" style="margin:0;font-weight:400">الموعد (اختياري)</label><input id="newDue" type="date"></div>
+
+  <div class="tabs" role="group" aria-label="تصفية">
+    <button data-f="all" aria-pressed="true">الكل</button>
+    <button data-f="active" aria-pressed="false">المتبقي</button>
+    <button data-f="done" aria-pressed="false">المنجز</button>
+  </div>
+
+  <ul id="list"></ul>
+  <div id="empty" class="empty" hidden>مفيش مهام هنا. أضف أول مهمة من فوق.</div>
+
+  <div class="foot">
+    <span id="repoName" dir="ltr"></span>
+    <button id="logout">تسجيل خروج</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+const API = "https://api.github.com";
+const FILE = "tasks.json";
+const LS = "todo-gh-config";
+const $ = id => document.getElementById(id);
+
+let cfg = null;       // {token, repo}
+let tasks = [];
+let sha = null;       // sha الحالي لملف tasks.json
+let filter = "all";
+let saving = false, dirty = false;
+
+/* ---------- تخزين الإعدادات محلياً ---------- */
+function loadCfg(){ try{ return JSON.parse(localStorage.getItem(LS)||"null"); }catch(e){ return null; } }
+function saveCfg(c){ try{ localStorage.setItem(LS, JSON.stringify(c)); }catch(e){} }
+function clearCfg(){ try{ localStorage.removeItem(LS); }catch(e){} }
+
+/* ---------- GitHub ---------- */
+async function gh(path, opts={}){
+  const res = await fetch(API+path, {
+    ...opts,
+    headers:{
+      "Accept":"application/vnd.github+json",
+      "Authorization":"Bearer "+cfg.token,
+      "X-GitHub-Api-Version":"2022-11-28",
+      ...(opts.body?{"Content-Type":"application/json"}:{})
+    }
+  });
+  return res;
+}
+const enc = s => btoa(unescape(encodeURIComponent(s)));
+const dec = b => decodeURIComponent(escape(atob(b.replace(/\n/g,""))));
+
+async function checkRepoPrivate(){
+  const r = await gh("/repos/"+cfg.repo);
+  if(r.status===404) throw new Error("الريبو مش موجود، أو التوكن مالوش صلاحية عليه.");
+  if(r.status===401) throw new Error("التوكن غلط أو منتهي.");
+  if(!r.ok) throw new Error("خطأ من GitHub ("+r.status+").");
+  const j = await r.json();
+  if(!j.private) throw new Error("الريبو ده Public! حوّله لـ Private من إعداداته الأول عشان بياناتك متتشافش.");
+}
+
+async function loadTasks(){
+  const r = await gh("/repos/"+cfg.repo+"/contents/"+FILE);
+  if(r.status===404){ tasks=[]; sha=null; return; }
+  if(!r.ok) throw new Error("مقدرتش أقرأ المهام ("+r.status+").");
+  const j = await r.json();
+  sha = j.sha;
+  try{ tasks = JSON.parse(dec(j.content)).tasks || []; }catch(e){ tasks=[]; }
+}
+
+async function pushTasks(){
+  const body = {
+    message: "update tasks · "+new Date().toISOString(),
+    content: enc(JSON.stringify({tasks, updated:new Date().toISOString()}, null, 2))
+  };
+  if(sha) body.sha = sha;
+  let r = await gh("/repos/"+cfg.repo+"/contents/"+FILE, {method:"PUT", body:JSON.stringify(body)});
+  if(r.status===409 || r.status===422){ // sha قديم: هات الأحدث وكرر
+    const g = await gh("/repos/"+cfg.repo+"/contents/"+FILE);
+    if(g.ok){ sha = (await g.json()).sha; body.sha = sha;
+      r = await gh("/repos/"+cfg.repo+"/contents/"+FILE, {method:"PUT", body:JSON.stringify(body)}); }
+  }
+  if(!r.ok) throw new Error("فشل الحفظ ("+r.status+").");
+  sha = (await r.json()).content.sha;
+}
+
+/* حفظ متسلسل: لو حصل تغيير أثناء الحفظ يتحفظ تاني بعدها */
+async function persist(){
+  dirty = true;
+  if(saving) return;
+  saving = true;
+  while(dirty){
+    dirty = false;
+    setStatus("saving","جاري الحفظ على GitHub…");
+    try{ await pushTasks(); }
+    catch(e){ setStatus("error", e.message+" دوس لإعادة المحاولة."); saving=false; return; }
+  }
+  saving = false;
+  setStatus("saved","اتحفظ على GitHub");
+}
+
+function setStatus(cls, text){
+  $("status").className = "status "+cls;
+  $("statusText").textContent = text;
+}
+$("status").addEventListener("click", ()=>{ if($("status").classList.contains("error")) persist(); });
+
+/* ---------- الواجهة ---------- */
+function show(which){
+  $("setup").hidden = which!=="setup";
+  $("app").hidden = which!=="app";
+}
+function setupMsg(t, cls){ const m=$("setupMsg"); m.textContent=t||""; m.className="msg "+(cls||""); }
+
+function render(){
+  const list = $("list"); list.innerHTML = "";
+  const shown = tasks.filter(t => filter==="all" || (filter==="done"?t.done:!t.done));
+  $("empty").hidden = shown.length>0;
+  const today = new Date().toISOString().slice(0,10);
+  shown.forEach(t=>{
+    const li = document.createElement("li"); if(t.done) li.className="done";
+    const cb = document.createElement("input"); cb.type="checkbox"; cb.className="box"; cb.checked=t.done;
+    cb.setAttribute("aria-label","تم");
+    cb.onchange = ()=>{ t.done = cb.checked; render(); persist(); };
+    const body = document.createElement("div"); body.className="body";
+    const tt = document.createElement("div"); tt.className="t"; tt.textContent=t.text; body.appendChild(tt);
+    if(t.due){ const d=document.createElement("div"); d.className="d"+(!t.done&&t.due<today?" late":"");
+      d.textContent = (!t.done&&t.due<today?"متأخرة · ":"")+t.due; body.appendChild(d); }
+    const x = document.createElement("button"); x.className="x"; x.textContent="×"; x.setAttribute("aria-label","حذف");
+    x.onclick = ()=>{ tasks = tasks.filter(k=>k.id!==t.id); render(); persist(); };
+    li.append(cb, body, x); list.appendChild(li);
+  });
+}
+
+$("addForm").addEventListener("submit", ()=>{
+  const text = $("newTask").value.trim(); if(!text) return;
+  tasks.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6), text, done:false, due:$("newDue").value||null, created:new Date().toISOString()});
+  $("newTask").value=""; $("newDue").value="";
+  render(); persist();
+});
+
+document.querySelectorAll(".tabs button").forEach(b=>{
+  b.onclick = ()=>{ filter=b.dataset.f;
+    document.querySelectorAll(".tabs button").forEach(k=>k.setAttribute("aria-pressed", k===b));
+    render(); };
+});
+
+async function openApp(){
+  show("app"); $("repoName").textContent = cfg.repo;
+  setStatus("saving","بحمّل المهام…");
+  try{ await loadTasks(); render(); setStatus("saved","متزامن مع GitHub"); }
+  catch(e){ setStatus("error", e.message); }
+}
+
+/* ---------- الاتصال / الإنشاء ---------- */
+function readForm(){
+  const token = $("token").value.trim(), repo = $("repo").value.trim().replace(/^https?:\/\/github\.com\//,"").replace(/\.git$/,"");
+  if(!token) throw new Error("حط الـ Token.");
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)) throw new Error("اكتب الريبو بالشكل ده: username/repo");
+  return {token, repo};
+}
+
+$("connect").onclick = async ()=>{
+  try{
+    cfg = readForm(); setupMsg("بتحقق من الريبو…");
+    await checkRepoPrivate();
+    saveCfg(cfg); setupMsg(""); await openApp();
+  }catch(e){ setupMsg(e.message,"err"); }
+};
+
+$("create").onclick = async ()=>{
+  try{
+    cfg = readForm(); setupMsg("بنشئ الريبو الخاص…");
+    const name = cfg.repo.split("/")[1];
+    const r = await gh("/user/repos", {method:"POST", body:JSON.stringify({name, private:true, description:"My tasks data", auto_init:true})});
+    if(r.status===422) throw new Error("الاسم ده موجود قبل كده. دوس «اتصال» بدل الإنشاء.");
+    if(r.status===401||r.status===403) throw new Error("التوكن مالوش صلاحية إنشاء ريبو. استخدم Classic token بصلاحية repo.");
+    if(!r.ok) throw new Error("فشل الإنشاء ("+r.status+").");
+    const j = await r.json(); cfg.repo = j.full_name; $("repo").value = j.full_name;
+    saveCfg(cfg); setupMsg("اتعمل ريبو Private: "+j.full_name,"ok");
+    await new Promise(s=>setTimeout(s,1200)); await openApp();
+  }catch(e){ setupMsg(e.message,"err"); }
+};
+
+$("logout").onclick = ()=>{
+  if(!confirm("هتتمسح بيانات الاتصال من الجهاز ده (المهام تفضل على GitHub). متأكد؟")) return;
+  clearCfg(); cfg=null; tasks=[]; $("token").value=""; show("setup");
+};
+
+/* ---------- بداية التشغيل ---------- */
+(function init(){
+  cfg = loadCfg();
+  if(cfg && cfg.token && cfg.repo){ $("repo").value=cfg.repo; openApp(); }
+  else show("setup");
+})();
+</script>
+</body>
+</html>
