@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f6fb"><meta name="description" content="نظّم مهامك اليومية وتابع إنجازك بسهولة."><title>مهامي | خطّط وأنجز</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:#f4f6fb;--surface:#fff;--surface-2:#f8f9fd;--text:#192238;--muted:#778099;--line:#e4e8f1;--accent:#4658d8;--accent-ink:#fff;--ok:#16845b;--warn:#c44545;--done:#a0a7ba;--shadow:0 14px 40px rgba(32,46,94,.07);--ring:rgba(70,88,216,.16)}
+@media(prefers-color-scheme:dark){:root{--bg:#101421;--surface:#191f30;--surface-2:#20273a;--text:#edf0fb;--muted:#a0a9c2;--line:#303950;--accent:#8794ff;--accent-ink:#11162a;--ok:#68d7a6;--warn:#ff9292;--done:#737d98;--shadow:0 14px 40px rgba(0,0,0,.18);--ring:rgba(135,148,255,.2)}}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg);scroll-behavior:smooth}body{margin:0;font-family:"IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:radial-gradient(ellipse at top right,rgba(93,109,235,.10),transparent 38%),var(--bg);color:var(--text);min-height:100vh;padding:max(20px,env(safe-area-inset-top)) 16px max(30px,env(safe-area-inset-bottom));line-height:1.65}main{max-width:680px;margin:0 auto}h1{font-size:clamp(1.55rem,5vw,2rem);font-weight:700;letter-spacing:-.04em;margin:0 0 3px}p.sub{margin:0 0 22px;color:var(--muted);font-size:.94rem}.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,5vw,28px);box-shadow:var(--shadow)}label{display:block;font-size:.9rem;font-weight:600;margin:16px 0 7px}input[type=text],input[type=password],input[type=date]{width:100%;font:inherit;color:var(--text);background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:12px 14px;min-height:48px;transition:border-color .18s,box-shadow .18s}input:focus,button:focus-visible{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px var(--ring)}.hint{font-size:.82rem;color:var(--muted);margin:7px 0 0;line-height:1.8}.hint a{color:var(--accent)}button{font:inherit;cursor:pointer;border-radius:13px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:10px 15px;min-height:44px;transition:transform .15s,background .15s,border-color .15s}button:active{transform:scale(.98)}button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700;box-shadow:0 7px 18px var(--ring)}button:disabled{opacity:.55;cursor:default}.row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}.row>button{flex:1}.msg{margin-top:12px;font-size:.9rem;min-height:1.2em}.msg.err{color:var(--warn)}.msg.ok{color:var(--ok)}header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 24px}.brand{display:flex;align-items:center;gap:13px}.brand-mark{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:var(--accent);color:var(--accent-ink);font-size:1.45rem;font-weight:800;box-shadow:0 8px 22px var(--ring)}.brand-copy h1{font-size:1.7rem}.eyebrow{font-size:.8rem;color:var(--muted);margin-top:1px}.status{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:7px;margin-top:7px;cursor:pointer}.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}.status.saved .dot{background:var(--ok)}.status.saving .dot{background:var(--accent);animation:pulse 1s infinite}.status.error .dot{background:var(--warn)}.status.offline .dot{background:#d99a1e}@keyframes pulse{50%{opacity:.35}}header button{padding:8px 12px;font-size:.85rem;min-height:40px}.add{display:flex;gap:9px;margin:0 0 10px;padding:8px;background:var(--surface);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}.add input[type=text]{flex:1;min-width:0;background:transparent;border-color:transparent;box-shadow:none}.add button{padding:0 19px;min-width:88px}.due-row{display:flex;align-items:center;gap:10px;margin:0 2px 22px;font-size:.88rem;color:var(--muted)}.due-row input{width:auto;padding:7px 10px;min-height:40px}.section-label{font-size:.82rem;color:var(--muted);font-weight:600;margin:0 0 10px}.tabs{display:flex;gap:7px;margin-bottom:14px;padding:5px;background:var(--surface-2);border:1px solid var(--line);border-radius:15px}.tabs button{flex:1;padding:8px 10px;font-size:.9rem;border-color:transparent;background:transparent;min-height:42px}.tabs button[aria-pressed=true]{background:var(--surface);color:var(--accent);border-color:var(--line);box-shadow:0 3px 10px rgba(30,40,80,.06);font-weight:700}ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}li{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:0 4px 14px rgba(32,46,94,.025);animation:rise .2s ease both}@keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}li .box{width:22px;height:22px;flex:none;accent-color:var(--accent);cursor:pointer}li .body{flex:1;min-width:0}.t{word-break:break-word;font-weight:500}li.done .t{text-decoration:line-through;color:var(--done)}li .d{font-size:.78rem;color:var(--muted);margin-top:2px}.d.late{color:var(--warn);font-weight:600}li .x{border:none;background:var(--surface-2);color:var(--muted);padding:3px 9px;font-size:1.25rem;line-height:1;border-radius:10px;min-height:36px}li .x:hover{color:var(--warn);background:rgba(196,69,69,.09)}.empty{text-align:center;color:var(--muted);padding:36px 12px;background:var(--surface);border:1px dashed var(--line);border-radius:16px}.empty-icon{font-size:2rem;display:block;margin-bottom:5px}.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;font-size:.8rem;color:var(--muted)}.foot button{border:none;background:none;color:var(--muted);text-decoration:underline;padding:4px;min-height:36px}#repoName{overflow-wrap:anywhere}
+.task-options{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:10px;align-items:end;margin:0 2px 22px}
+.task-options .due-row{margin:0;display:flex;flex-direction:column;align-items:stretch;gap:5px}
+.compact-label{display:block;margin:0!important;font-size:.82rem!important;color:var(--muted);font-weight:600}
+select{width:100%;min-height:42px;padding:8px 10px;font:inherit;font-size:.88rem;color:var(--text);background:var(--surface-2);border:1px solid var(--line);border-radius:12px}
+select:focus{outline:0;border-color:var(--accent);box-shadow:0 0 0 4px var(--ring)}
+.dashboard{background:linear-gradient(135deg,var(--surface),var(--surface-2));border:1px solid var(--line);border-radius:20px;padding:18px;margin:0 0 22px;box-shadow:var(--shadow)}
+.dashboard-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.dashboard-top .section-label{margin:0 0 2px}.dashboard-title{font-size:1rem;font-weight:700}
+.completion{font-size:1.45rem;font-weight:800;color:var(--accent);letter-spacing:-.04em}
+.progress-track{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:14px 0 16px}
+.progress-bar{height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .25s ease}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.stat{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px 4px 8px;background:var(--surface);border:1px solid var(--line);border-radius:13px;min-width:0}
+.stat-icon{font-size:1rem}.stat-number{font-size:1.2rem;font-weight:800;line-height:1.5}.stat-label{font-size:.72rem;color:var(--muted)}
+.task-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.badge{font-size:.72rem;padding:2px 8px;border-radius:7px;background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.badge.priority-urgent{color:var(--warn);background:rgba(196,69,69,.09);border-color:rgba(196,69,69,.2)}
+.badge.priority-high{color:#bd7b12;background:rgba(217,154,30,.10);border-color:rgba(217,154,30,.2)}
+@media(max-width:480px){.task-options{grid-template-columns:1fr 1fr}.task-options .due-row{grid-column:1/-1}.stats-grid{gap:6px}.stat{padding:8px 2px}.stat-label{font-size:.68rem}.dashboard{padding:14px}}
+\n 
+.view-switch{display:flex;gap:7px;margin:0 0 16px;padding:5px;border:1px solid var(--line);background:var(--surface-2);border-radius:15px}
+.view-btn{flex:1;border-color:transparent;background:transparent;font-size:.9rem;font-weight:600}
+.view-btn.active{background:var(--surface);border-color:var(--line);color:var(--accent);box-shadow:0 3px 10px rgba(30,40,80,.06)}
+.today-panel{margin-bottom:18px}
+.today-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,var(--surface),var(--surface-2));box-shadow:var(--shadow)}
+.today-heading h2{margin:2px 0 3px;font-size:1.45rem;letter-spacing:-.03em}
+.today-date{font-size:.85rem;color:var(--muted)}
+.today-orb{width:56px;height:56px;display:grid;place-items:center;border-radius:18px;background:var(--ring);font-size:1.65rem}
+.today-focus{display:flex;align-items:center;gap:12px;margin:12px 0;padding:15px 16px;border:1px solid var(--line);background:var(--surface);border-radius:16px}
+.focus-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:var(--surface-2);font-size:1.2rem;flex:none}
+.today-focus strong{display:block;font-size:.92rem}.today-focus div div{font-size:.82rem;color:var(--muted);margin-top:2px}
+.today-list-title{margin:18px 2px 10px}
+.today-list{display:grid;gap:8px}
+.today-task{display:flex;align-items:center;gap:10px;padding:12px 13px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.today-task input{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.today-task-text{min-width:0;flex:1;overflow-wrap:anywhere;font-size:.9rem}
+.today-task-text.done{text-decoration:line-through;color:var(--done)}
+.today-task-meta{font-size:.73rem;color:var(--muted);white-space:nowrap}
+.today-empty{padding:18px;text-align:center;border:1px dashed var(--line);border-radius:14px;color:var(--muted);font-size:.87rem}
+.text-action{display:block;margin:10px auto 0;border:0;background:transparent;color:var(--accent);font-size:.87rem;font-weight:700}
+@media(max-width:420px){.today-heading{padding:17px}.today-heading h2{font-size:1.25rem}.today-orb{width:47px;height:47px}.today-task-meta{white-space:normal;text-align:left}}
+\n
+.brain-panel{margin-bottom:18px}
+.brain-hero{display:flex;align-items:center;gap:14px;padding:20px;border:1px solid var(--line);border-radius:21px;background:linear-gradient(135deg,var(--surface),var(--surface-2));box-shadow:var(--shadow)}
+.brain-symbol{width:58px;height:58px;flex:none;display:grid;place-items:center;border-radius:18px;background:var(--ring);font-size:1.8rem}
+.brain-hero h2{margin:3px 0;font-size:1.35rem}.brain-hero p{margin:4px 0 0;color:var(--muted);font-size:.86rem;line-height:1.6}
+.smart-prompts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0}
+.smart-prompts button{min-height:48px;background:var(--surface);border:1px solid var(--line);border-radius:13px;font-weight:600;font-size:.84rem}
+.brain-form,.brain-output{padding:15px;border:1px solid var(--line);border-radius:16px;background:var(--surface);margin-top:12px}
+.brain-form label{display:block;font-weight:700;margin-bottom:7px}
+.brain-form textarea{width:100%;resize:vertical;min-height:90px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--text);font:inherit}
+.brain-form button{width:100%;margin-top:9px}
+.brain-output{line-height:1.75;font-size:.91rem;overflow-wrap:anywhere}
+.brain-output h3{margin:0 0 9px;font-size:1rem}.brain-output ol,.brain-output ul{padding-right:22px;margin:8px 0}
+.brain-output li{margin:5px 0}.brain-output .answer-intro{color:var(--muted);margin:0 0 8px}
+.brain-welcome p{margin:5px 0 0;color:var(--muted)}
+.add-smart-tasks{width:100%;margin-top:10px}
+.brain-note{color:var(--muted);font-size:.76rem;line-height:1.6;margin:10px 3px}
+@media(max-width:390px){.smart-prompts{grid-template-columns:1fr}.brain-hero{padding:15px}}
+\n[hidden]{display:none!important}@media(max-width:420px){body{padding-left:12px;padding-right:12px}.brand-mark{width:43px;height:43px;border-radius:14px}.brand-copy h1{font-size:1.5rem}.add button{min-width:75px;padding:0 12px}.due-row{flex-wrap:wrap}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+
+<!-- شاشة الإعداد -->
+<section id="setup" hidden>
+  <header><div class="brand"><div class="brand-mark" aria-hidden="true">✓</div><div class="brand-copy"><h1>مهامي</h1><div class="eyebrow">خطّط ليومك، وأنجز أهدافك</div></div></div></header>
+  <p class="sub">مكان بسيط وآمن لتنظيم مهامك ومتابعتها من أجهزتك.</p>
+  <div class="card">
+    <label for="token">GitHub Token</label>
+    <input id="token" type="password" autocomplete="off" placeholder="github_pat_…">
+    <p class="hint">من GitHub: Settings ← Developer settings ← Personal access tokens ← Fine-grained. اديله صلاحية <b>Contents: Read and write</b> على الريبو بس. (لو هتنشئ الريبو من هنا، استخدم Classic token بصلاحية <b>repo</b>.)</p>
+
+    <label for="repo">اسم الريبو</label>
+    <input id="repo" type="text" dir="ltr" placeholder="username/my-todo-data" autocapitalize="off" autocorrect="off">
+    <p class="hint">لو الريبو مش موجود، دوس «إنشاء ريبو خاص» وهيتعمل Private تلقائياً.</p>
+
+    <div class="row">
+      <button class="primary" id="connect">اتصال</button>
+      <button id="create">إنشاء ريبو خاص</button>
+    </div>
+    <div id="setupMsg" class="msg" role="status"></div>
+    <p class="hint">التوكن بيتحفظ على جهازك بس (في المتصفح) ومبيتبعتش لأي مكان غير GitHub.</p>
+  </div>
+</section>
+
+<!-- شاشة المهام -->
+<section id="app" hidden>
+  <header>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">✓</div>
+      <div class="brand-copy"><h1>مهامي</h1><div class="eyebrow">خطّط ليومك، وأنجز أهدافك</div>
+        <div id="status" class="status" role="status" title="اضغط لإعادة المزامنة"><span class="dot"></span><span id="statusText">—</span></div>
+      </div>
+    </div>
+    <button id="refresh" aria-label="تحديث">تحديث</button>
+  </header>
+
+  <nav class="view-switch" aria-label="أقسام التطبيق">
+    <button type="button" class="view-btn active" data-view="today" aria-pressed="true">☀️ يومي</button>
+    <button type="button" class="view-btn" data-view="tasks" aria-pressed="false">☑️ كل المهام</button>
+    <button type="button" class="view-btn" data-view="brain" aria-pressed="false">🧠 العقل الذكي</button>
+  </nav>
+  <section id="todayPanel" class="today-panel">
+    <div class="today-heading">
+      <div><div class="section-label">نظرة سريعة</div><h2 id="todayGreeting">أهلًا بيك 👋</h2><div class="today-date" id="todayDate"></div></div>
+      <div class="today-orb" aria-hidden="true">☀️</div>
+    </div>
+    <div class="today-focus"><span class="focus-icon">🎯</span><div><strong>ابدأ بالأهم</strong><div id="focusText">أضف مهامك، واختار أهم حاجة تبدأ بيها.</div></div></div>
+    <div class="section-label today-list-title">مهام اليوم والمتأخرة</div>
+    <div id="todayList" class="today-list"></div>
+    <button type="button" id="showAllTasks" class="text-action">عرض كل المهام ←</button>
+  </section>
+  <section id="brainPanel" class="brain-panel" hidden>
+    <div class="brain-hero">
+      <div class="brain-symbol">🧠</div>
+      <div><div class="section-label">مساعدك الشخصي</div><h2>العقل الذكي</h2><p>خطّط، رتّب أولوياتك، وحوّل أهدافك إلى خطوات قابلة للتنفيذ.</p></div>
+    </div>
+    <div class="smart-prompts" aria-label="اقتراحات سريعة">
+      <button type="button" data-smart="plan">📅 خطّط لي يومي</button>
+      <button type="button" data-smart="priority">⚡ ماذا أفعل الآن؟</button>
+      <button type="button" data-smart="analysis">📊 حلّل إنجازي</button>
+      <button type="button" data-smart="goal">🎯 قسّم لي هدفًا</button>
+    </div>
+    <form id="brainForm" class="brain-form">
+      <label for="brainInput">اكتب طلبك</label>
+      <textarea id="brainInput" rows="3" placeholder="مثال: قسّم لي هدف تعلّم أساسيات الشبكات إلى مهام صغيرة..."></textarea>
+      <button type="submit" class="primary">حلّل طلبي ✨</button>
+    </form>
+    <div id="brainOutput" class="brain-output" aria-live="polite">
+      <div class="brain-welcome"><strong>أقدر أساعدك في إيه؟</strong><p>جرّب أحد الاقتراحات فوق. المهارات الأساسية تعمل داخل التطبيق دون إرسال بياناتك لخدمة خارجية.</p></div>
+    </div>
+    <button type="button" id="addSmartTasks" class="primary add-smart-tasks" hidden>＋ أضف الخطوات إلى مهامي</button>
+    <p class="brain-note">النسخة الحالية تستخدم قواعد محلية ذكية، وليست نموذج محادثة متصلًا بالإنترنت. يمكن إضافة ذكاء اصطناعي متقدم لاحقًا عبر خادم آمن.</p>
+  </section>
+  <section id="tasksPanel">
+  <form class="add" id="addForm" onsubmit="return false">
+    <input id="newTask" type="text" placeholder="اكتب مهمة جديدة" aria-label="مهمة جديدة" autocomplete="off">
+    <button class="primary" id="addBtn" type="submit">إضافة</button>
+  </form>
+  <div class="task-options">
+    <div class="due-row"><label for="newDue" style="margin:0;font-weight:600">الموعد</label><input id="newDue" type="date"></div>
+    <label class="compact-label" for="newPriority">الأولوية
+      <select id="newPriority"><option value="normal">عادية</option><option value="high">مهمة</option><option value="urgent">عاجلة</option></select>
+    </label>
+    <label class="compact-label" for="newCategory">التصنيف
+      <select id="newCategory"><option value="عام">عام</option><option value="دراسة">دراسة</option><option value="شغل">شغل</option><option value="شبكات">شبكات</option><option value="شخصي">شخصي</option></select>
+    </label>
+  </div>
+  <section class="dashboard" aria-label="ملخص الإنجاز">
+    <div class="dashboard-top"><div><div class="section-label">ملخص مهامك</div><div class="dashboard-title">خطوة صغيرة كل يوم ✨</div></div><div class="completion" id="completionRate">0%</div></div>
+    <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+    <div class="stats-grid">
+      <div class="stat"><span class="stat-icon">📋</span><span class="stat-number" id="totalCount">0</span><span class="stat-label">كل المهام</span></div>
+      <div class="stat"><span class="stat-icon">✅</span><span class="stat-number" id="doneCount">0</span><span class="stat-label">مكتملة</span></div>
+      <div class="stat"><span class="stat-icon">⏳</span><span class="stat-number" id="remainingCount">0</span><span class="stat-label">متبقية</span></div>
+      <div class="stat"><span class="stat-icon">🔥</span><span class="stat-number" id="lateCount">0</span><span class="stat-label">متأخرة</span></div>
+    </div>
+  </section>
+
+  <div class="section-label">قائمة المهام</div>
+  <div class="tabs" role="group" aria-label="تصفية">
+    <button data-f="all" aria-pressed="true">الكل</button>
+    <button data-f="active" aria-pressed="false">المتبقي</button>
+    <button data-f="done" aria-pressed="false">المنجز</button>
+  </div>
+
+  <ul id="list"></ul>
+  <div id="empty" class="empty" hidden><span class="empty-icon" aria-hidden="true">✦</span><div>مفيش مهام هنا</div><div class="hint">أضف مهمة جديدة وابدأ أول خطوة.</div></div>
+  </section>
+
+  <div class="foot">
+    <span id="repoName" dir="ltr"></span>
+    <button id="logout">تسجيل خروج</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+const API = "https://api.github.com";
+const FILE = "tasks.json";
+const LS = "todo-gh-config";
+const LS_DATA = "todo-gh-data";
+const $ = id => document.getElementById(id);
+
+let cfg = null;                 // {token, repo}
+let state = {tasks: [], deleted: {}};   // deleted: id -> وقت الحذف
+let dirty = false;              // فيه تغييرات لسه ما اترفعتش
+let version = 0;                // بيزيد مع كل تغيير محلي
+let filter = "all";
+let currentView = "today";
+let syncing = false, again = false;
+
+/* ---------- تخزين محلي ---------- */
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)||"null"); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+function cacheState(){ lsSet(LS_DATA, {repo:cfg.repo, state, dirty}); }
+
+/* ---------- GitHub ---------- */
+async function gh(path, opts={}){
+  return fetch(API+path, {
+    ...opts,
+    headers:{
+      "Accept":"application/vnd.github+json",
+      "Authorization":"Bearer "+cfg.token,
+      "X-GitHub-Api-Version":"2022-11-28",
+      ...(opts.body?{"Content-Type":"application/json"}:{})
+    }
+  });
+}
+const enc = s => btoa(unescape(encodeURIComponent(s)));
+const dec = b => decodeURIComponent(escape(atob(b.replace(/\n/g,""))));
+
+async function checkRepoPrivate(){
+  const r = await gh("/repos/"+cfg.repo);
+  if(r.status===404) throw new Error("الريبو مش موجود، أو التوكن مالوش صلاحية عليه.");
+  if(r.status===401) throw new Error("التوكن غلط أو منتهي.");
+  if(!r.ok) throw new Error("خطأ من GitHub ("+r.status+").");
+  const j = await r.json();
+  if(!j.private) throw new Error("الريبو ده Public! حوّله لـ Private من إعداداته الأول عشان بياناتك متتشافش.");
+}
+
+/* ---------- الدمج ---------- */
+function norm(d){
+  const tasks = (d && d.tasks || []).map(t=>({...t, updated: t.updated || Date.parse(t.created) || 0}));
+  return {tasks, deleted: (d && d.deleted) || {}};
+}
+function merge(a, b){
+  const del = {...b.deleted};
+  for(const [id,ts] of Object.entries(a.deleted)) del[id] = Math.max(del[id]||0, ts);
+  const map = new Map();
+  [...b.tasks, ...a.tasks].forEach(t=>{
+    const cur = map.get(t.id);
+    if(!cur || t.updated >= cur.updated) map.set(t.id, t);
+  });
+  const tasks = [...map.values()].filter(t => !(del[t.id] && del[t.id] >= t.updated));
+  return {tasks, deleted: del};
+}
+function canon(s){
+  return JSON.stringify({
+    t: [...s.tasks].sort((x,y)=>x.id<y.id?-1:1),
+    d: Object.keys(s.deleted).sort().map(k=>[k,s.deleted[k]])
+  });
+}
+
+/* ---------- المزامنة ---------- */
+async function fetchRemote(){
+  const r = await gh("/repos/"+cfg.repo+"/contents/"+FILE+"?t="+Date.now());
+  if(r.status===404) return {data:norm(null), sha:null};
+  if(r.status===401) throw new Error("التوكن غلط أو منتهي. سجّل خروج وادخل بتوكن جديد.");
+  if(!r.ok) throw new Error("مقدرتش أقرأ المهام ("+r.status+").");
+  const j = await r.json();
+  let data = null; try{ data = JSON.parse(dec(j.content)); }catch(e){}
+  return {data:norm(data), sha:j.sha};
+}
+
+async function sync(){
+  if(!cfg) return;
+  if(syncing){ again = true; return; }
+  syncing = true;
+  try{
+    do{
+      again = false;
+      setStatus("saving", "جاري المزامنة مع GitHub…");
+      const remote = await fetchRemote();
+      state = merge(state, remote.data);          // دمج فوري بدون await
+      const v = version;
+      render();
+      renderToday();
+      const needPush = dirty || canon(state) !== canon(remote.data);
+      cacheState();
+      if(needPush){
+        const body = {
+          message: "update tasks · "+new Date().toISOString(),
+          content: enc(JSON.stringify({tasks:state.tasks, deleted:state.deleted, updated:new Date().toISOString()}, null, 2))
+        };
+        if(remote.sha) body.sha = remote.sha;
+        const r = await gh("/repos/"+cfg.repo+"/contents/"+FILE, {method:"PUT", body:JSON.stringify(body)});
+        if(r.status===409 || r.status===422){ again = true; continue; }   // اتغير في الأثناء: كرر
+        if(!r.ok) throw new Error("فشل الحفظ ("+r.status+").");
+        if(version===v){ dirty = false; cacheState(); } else again = true;
+      } else if(version===v){ dirty = false; cacheState(); }
+    } while(again);
+    setStatus("saved", "متزامن مع GitHub");
+  }catch(e){
+    const offline = e instanceof TypeError || !navigator.onLine;
+    setStatus(offline?"offline":"error", offline
+      ? (dirty?"مفيش نت. التغييرات محفوظة على جهازك وهتترفع لما النت يرجع.":"مفيش نت. بتشوف آخر نسخة محفوظة.")
+      : e.message+" دوس هنا لإعادة المحاولة.");
+  }
+  syncing = false;
+}
+
+function change(fn){
+  fn(); version++; dirty = true; cacheState(); render(); renderToday(); sync();
+}
+
+function setStatus(cls, text){
+  $("status").className = "status "+cls;
+  $("statusText").textContent = text;
+}
+$("status").addEventListener("click", ()=>{ if(!syncing) sync(); });
+$("refresh").addEventListener("click", ()=> sync());
+window.addEventListener("online", ()=> sync());
+document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible" && cfg) sync(); });
+
+/* ---------- الواجهة ---------- */
+function show(which){
+  $("setup").hidden = which!=="setup";
+  $("app").hidden = which!=="app";
+}
+function setupMsg(t, cls){ const m=$("setupMsg"); m.textContent=t||""; m.className="msg "+(cls||""); }
+
+function render(){
+  const list = $("list"); list.innerHTML = "";
+  const shown = state.tasks
+    .filter(t => filter==="all" || (filter==="done"?t.done:!t.done))
+    .sort((a,b)=> (b.created||"") < (a.created||"") ? -1 : 1);
+  $("empty").hidden = shown.length>0;
+  const allTasks = state.tasks;
+  const today = localDateString();
+  const completed = allTasks.filter(t=>t.done).length;
+  const late = allTasks.filter(t=>!t.done && t.due && t.due<today).length;
+  const rate = allTasks.length ? Math.round(completed/allTasks.length*100) : 0;
+  $("totalCount").textContent = allTasks.length;
+  $("doneCount").textContent = completed;
+  $("remainingCount").textContent = allTasks.length-completed;
+  $("lateCount").textContent = late;
+  $("completionRate").textContent = rate+"%";
+  $("progressBar").style.width = rate+"%";
+  shown.forEach(t=>{
+    const li = document.createElement("li"); if(t.done) li.className="done";
+    const cb = document.createElement("input"); cb.type="checkbox"; cb.className="box"; cb.checked=t.done;
+    cb.setAttribute("aria-label","تم");
+    cb.onchange = ()=> change(()=>{ t.done = cb.checked; t.updated = Date.now(); });
+    const body = document.createElement("div"); body.className="body";
+    const tt = document.createElement("div"); tt.className="t"; tt.textContent=t.text; body.appendChild(tt);
+    const badges = document.createElement("div"); badges.className="task-badges";
+    if(t.priority && t.priority!=="normal"){
+      const pb=document.createElement("span"); pb.className="badge "+(t.priority==="urgent"?"priority-urgent":"priority-high");
+      pb.textContent=t.priority==="urgent"?"عاجلة":"مهمة"; badges.appendChild(pb);
+    }
+    if(t.category && t.category!=="عام"){
+      const cat=document.createElement("span"); cat.className="badge"; cat.textContent=t.category; badges.appendChild(cat);
+    }
+    if(badges.childNodes.length) body.appendChild(badges);
+    if(t.due){ const d=document.createElement("div"); d.className="d"+(!t.done&&t.due<today?" late":"");
+      d.textContent = (!t.done&&t.due<today?"متأخرة · ":"")+t.due; body.appendChild(d); }
+    const x = document.createElement("button"); x.className="x"; x.textContent="×"; x.setAttribute("aria-label","حذف");
+    x.onclick = ()=> change(()=>{
+      state.tasks = state.tasks.filter(k=>k.id!==t.id);
+      state.deleted[t.id] = Date.now();
+    });
+    li.append(cb, body, x); list.appendChild(li);
+  });
+}
+
+$("addForm").addEventListener("submit", ()=>{
+  const text = $("newTask").value.trim(); if(!text) return;
+  const now = Date.now();
+  change(()=> state.tasks.unshift({
+    id: now.toString(36)+Math.random().toString(36).slice(2,6),
+    text, done:false, due:$("newDue").value||null,
+    priority:$("newPriority").value||"normal",
+    category:$("newCategory").value||"عام",
+    created:new Date(now).toISOString(), updated:now
+  }));
+  $("newTask").value=""; $("newDue").value=""; $("newPriority").value="normal"; $("newCategory").value="عام";
+});
+
+document.querySelectorAll(".tabs button").forEach(b=>{
+  b.onclick = ()=>{ filter=b.dataset.f;
+    document.querySelectorAll(".tabs button").forEach(k=>k.setAttribute("aria-pressed", k===b));
+    render(); };
+});
+
+function localDateString(date=new Date()){
+  return [date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")].join("-");
+}
+function renderToday(){
+  const now=new Date(), today=localDateString(now);
+  const dateText=new Intl.DateTimeFormat("ar-EG",{weekday:"long",year:"numeric",month:"long",day:"numeric"}).format(now);
+  $("todayDate").textContent=dateText;
+  const hour=now.getHours();
+  $("todayGreeting").textContent=(hour<12?"صباح الخير":hour<17?"نهارك سعيد":"مساء الخير")+" 👋";
+  const dueTasks=state.tasks.filter(t=>!t.done && (!t.due || t.due<=today))
+    .sort((a,b)=>{
+      const priority={urgent:0,high:1,normal:2};
+      const pa=priority[a.priority||"normal"],pb=priority[b.priority||"normal"];
+      if(pa!==pb)return pa-pb;
+      if(a.due&&b.due)return a.due.localeCompare(b.due);
+      if(a.due)return -1;if(b.due)return 1;
+      return (a.created||"").localeCompare(b.created||"");
+    });
+  const focus=dueTasks[0];
+  $("focusText").textContent=focus ? "اقتراحنا تبدأ بـ: "+focus.text : "مفيش مهام مستحقة حاليًا. استغل وقتك أو أضف مهمة جديدة.";
+  const list=$("todayList");list.innerHTML="";
+  const visible=state.tasks.filter(t=>!t.done && (!t.due || t.due<=today))
+    .sort((a,b)=>{
+      const priority={urgent:0,high:1,normal:2};
+      const diff=(priority[a.priority||"normal"])-(priority[b.priority||"normal"]);
+      if(diff)return diff;
+      if(a.due&&b.due)return a.due.localeCompare(b.due);
+      if(a.due)return -1;if(b.due)return 1;
+      return (a.created||"").localeCompare(b.created||"");
+    }).slice(0,5);
+  if(!visible.length){
+    const empty=document.createElement("div");empty.className="today-empty";
+    empty.textContent=state.tasks.some(t=>!t.done&&t.due>today)?"مفيش مهام مستحقة النهارده. عندك مهام جاية في الأيام المقبلة.":"يومك فاضي من المهام المستحقة — بداية ممتازة!";
+    list.appendChild(empty);return;
+  }
+  visible.forEach(t=>{
+    const row=document.createElement("label");row.className="today-task";
+    const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.done;cb.setAttribute("aria-label","إكمال "+t.text);
+    cb.onchange=()=>change(()=>{t.done=cb.checked;t.updated=Date.now();});
+    const title=document.createElement("span");title.className="today-task-text";title.textContent=t.text;
+    const meta=document.createElement("span");meta.className="today-task-meta";
+    meta.textContent=t.due&&t.due<today?"متأخرة":t.priority==="urgent"?"عاجلة":t.priority==="high"?"مهمة":t.due?"اليوم":"بدون موعد";
+    row.append(cb,title,meta);list.appendChild(row);
+  });
+}
+function setView(view){
+  currentView=view;
+  $("todayPanel").hidden=view!=="today";
+  $("tasksPanel").hidden=view!=="tasks";
+  $("brainPanel").hidden=view!=="brain";
+  document.querySelectorAll(".view-btn").forEach(b=>{
+    const active=b.dataset.view===view;
+    b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));
+  });
+}
+document.querySelectorAll(".view-btn").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
+$("showAllTasks").addEventListener("click",()=>setView("tasks"));
+
+let smartDraftTasks=[];
+function addSmartText(tag, text){
+  const li=document.createElement("li");li.textContent=text;tag.appendChild(li);
+}
+function showBrainAnswer(title, intro, items, options={}){
+  const out=$("brainOutput");out.innerHTML="";
+  const h=document.createElement("h3");h.textContent=title;out.appendChild(h);
+  const p=document.createElement("p");p.className="answer-intro";p.textContent=intro;out.appendChild(p);
+  if(items&&items.length){
+    const list=document.createElement(options.ordered?"ol":"ul");
+    items.forEach(item=>addSmartText(list,item));
+    out.appendChild(list);
+  }
+  if(options.extra){const x=document.createElement("p");x.textContent=options.extra;out.appendChild(x);}
+  smartDraftTasks=options.tasks||[];
+  $("addSmartTasks").hidden=!smartDraftTasks.length;
+}
+function analyzeSmartRequest(mode, raw=""){
+  const text=(raw||"").trim().toLowerCase();
+  const pending=state.tasks.filter(t=>!t.done);
+  const today=localDateString();
+  const late=pending.filter(t=>t.due&&t.due<today);
+  const due=pending.filter(t=>!t.due||t.due<=today);
+  const high=pending.filter(t=>t.priority==="urgent"||t.priority==="high");
+  const tasks=[];
+  let title="",intro="",items=[],extra="";
+  if(mode==="plan" || /خطط|خطة اليوم|خطط لي يوم|نظم يوم/.test(text)){
+    title="خطة عملية ليومك 📅";
+    const ranked=[...pending].sort((a,b)=>{
+      const p={urgent:0,high:1,normal:2};
+      const d=(p[a.priority||"normal"])-(p[b.priority||"normal"]);
+      if(d)return d;
+      if(a.due&&b.due)return a.due.localeCompare(b.due);
+      if(a.due)return -1;if(b.due)return 1;return (a.created||"").localeCompare(b.created||"");
+    });
+    if(!ranked.length){intro="لسه مفيش مهام متبقية. أضف أهم 3 حاجات عايز تنجزها النهارده.";items=["اكتب مهمة واحدة مهمة","حدد لها وقتًا مناسبًا","ابدأ بجلسة تركيز قصيرة"];}
+    else {intro="رتّبت مهامك حسب الأولوية والموعد. اقتراح للتنفيذ:";items=ranked.slice(0,5).map((t,i)=>(i+1)+". "+t.text+(t.due?" — الموعد: "+t.due:""));if(late.length)extra="ابدأ بمراجعة "+late.length+" مهمة متأخرة، وأعد جدولة ما لا يمكن إنجازه اليوم.";}
+  } else if(mode==="priority" || /ماذا أفعل|ابدأ بإيه|أعمل إيه|الأولوية/.test(text)){
+    title="أنسب خطوة دلوقتي ⚡";
+    const next=[...pending].sort((a,b)=>{
+      const p={urgent:0,high:1,normal:2};
+      const d=(p[a.priority||"normal"])-(p[b.priority||"normal"]);
+      if(d)return d;
+      if(a.due&&b.due)return a.due.localeCompare(b.due);
+      if(a.due)return -1;if(b.due)return 1;return (a.created||"").localeCompare(b.created||"");
+    })[0];
+    intro=next?"ابدأ بالمهمة دي؛ لأنها الأعلى أولوية وفق البيانات المسجلة عندك:":"مفيش مهام متبقية مسجلة حاليًا.";
+    items=next?[next.text,"قسّمها لخطوة صغيرة تقدر تخلصها في 20–30 دقيقة","بعد ما تخلص، علّم عليها كمكتملة"]:["أضف المهمة الأهم","حدد موعدًا وأولوية","ابدأ بجلسة تركيز"];
+  } else if(mode==="analysis" || /حلل|تحليل|إنجازي|أدائي|تقريري/.test(text)){
+    const done=state.tasks.filter(t=>t.done).length;
+    const rate=state.tasks.length?Math.round(done/state.tasks.length*100):0;
+    title="ملخص إنجازك 📊";
+    intro="ملخص مبني على المهام المسجلة في التطبيق:";
+    items=["إجمالي المهام: "+state.tasks.length,"المهام المكتملة: "+done,"المهام المتبقية: "+pending.length,"المهام المتأخرة: "+late.length,"نسبة الإنجاز الإجمالية: "+rate+"%","المهام عالية الأولوية: "+high.length];
+    extra=late.length?"اقتراح: راجع المواعيد المتأخرة وحدد ما ستنجزه أولًا وما يحتاج موعدًا جديدًا.":pending.length?"اقتراح: اختر مهمة واحدة فقط كبداية، ثم انتقل إلى التالية.":"ممتاز! راجع أهدافك وحدد الخطوة القادمة.";
+  } else {
+    title="نحوّل هدفك لخطة 🎯";
+    let steps;
+    if(/شبك|network|subnet|ccna|router|سيسكو/.test(text)) steps=["راجع أساسيات الشبكات ومكونات الشبكة","افهم نموذج OSI وTCP/IP","تدرّب على IPv4 وSubnetting","طبّق إعدادات الراوتر والسويتش في Packet Tracer","نفّذ مشروع شبكة صغير واكتب ملخصًا لما تعلمته"];
+    else if(/linux|لينكس|سيرفر|خادم/.test(text)) steps=["تعلّم أوامر الطرفية الأساسية","تدرّب على الملفات والمجلدات والصلاحيات","تعلّم إدارة المستخدمين والعمليات","جرّب إعداد الشبكة والخدمات الأساسية","نفّذ تطبيقًا عمليًا ووثّق خطواتك"];
+    else if(/انجليزي|إنجليزي|english|لغة/.test(text)) steps=["خصص 10 دقائق للمفردات","استمع إلى مقطع قصير ودوّن العبارات","تدرّب على التحدث 10 دقائق","اكتب فقرة قصيرة وصحح أخطاءها","راجع الكلمات الجديدة في نهاية الأسبوع"];
+    else if(/امتحان|اختبار|مذاكر|دراسة|مادة/.test(text)) steps=["اكتب الموضوعات المطلوبة وحدد الأصعب","قسّم المنهج إلى أجزاء صغيرة","ذاكر جزءًا ثم اختبر نفسك دون النظر للملاحظات","راجع الأخطاء والموضوعات الصعبة","خصص جلسة مراجعة نهائية قبل الموعد"];
+    else steps=["عرّف النتيجة التي تريد الوصول إليها بوضوح","قسّم الهدف إلى 3–5 خطوات صغيرة","حدد موعدًا واقعيًا لكل خطوة","ابدأ بأصغر خطوة يمكن إنجازها اليوم","راجع التقدم وعدّل الخطة أسبوعيًا"];
+    intro=text?"خطة مبدئية لهدفك: "+raw:"اختار هدفًا أو اكتبه في المربع عشان أساعدك تقسّمه.";
+    items=steps;
+    if(text){
+      tasks=steps.map((t,i)=>({text:t,priority:i===0?"high":"normal",category:/شبك|network|subnet|ccna|router|سيسكو/.test(text)?"شبكات":/امتحان|اختبار|مذاكر|دراسة|مادة/.test(text)?"دراسة":"عام"}));
+    }
+  }
+  showBrainAnswer(title,intro,items,{extra,tasks,ordered:mode==="goal"});
+}
+document.querySelectorAll("[data-smart]").forEach(b=>b.addEventListener("click",()=>{
+  const mode=b.dataset.smart;
+  if(mode==="goal"){
+    $("brainInput").value="";
+    $("brainInput").placeholder="اكتب هدفك، مثل: تعلّم الشبكات أو تحسين الإنجليزي";
+    $("brainInput").focus();
+  }else analyzeSmartRequest(mode);
+}));
+$("brainForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const raw=$("brainInput").value.trim();
+  if(!raw){showBrainAnswer("اكتب طلبك الأول ✍️","مثال: قسّم لي هدف تعلّم الشبكات إلى خطوات صغيرة.",[]);return;}
+  analyzeSmartRequest("goal",raw);
+});
+$("addSmartTasks").addEventListener("click",()=>{
+  if(!smartDraftTasks.length)return;
+  const now=Date.now();
+  change(()=>{
+    smartDraftTasks.slice().reverse().forEach((t,i)=>state.tasks.unshift({
+      id:(now+i).toString(36)+Math.random().toString(36).slice(2,6),
+      text:t.text,done:false,due:null,priority:t.priority||"normal",category:t.category||"عام",
+      created:new Date(now+i).toISOString(),updated:now+i
+    }));
+  });
+  smartDraftTasks=[];
+  $("addSmartTasks").hidden=true;
+  showBrainAnswer("اتضافت الخطة بنجاح ✅","أضفنا الخطوات إلى قائمة مهامك. تقدر تراجعها وتعدّلها من قسم «كل المهام».",[]);
+  setView("tasks");
+});
+
+async function openApp(){
+  show("app"); $("repoName").textContent = cfg.repo;
+  const c = lsGet(LS_DATA);
+  if(c && c.repo===cfg.repo){ state = norm(c.state); state.deleted = c.state.deleted||{}; dirty = !!c.dirty; }
+  else { state = {tasks:[], deleted:{}}; dirty = false; }
+  render();
+  renderToday();
+  setView(currentView);
+  sync();
+}
+
+/* ---------- الاتصال / الإنشاء ---------- */
+function readForm(){
+  const token = $("token").value.trim(), repo = $("repo").value.trim().replace(/^https?:\/\/github\.com\//,"").replace(/\.git$/,"");
+  if(!token) throw new Error("حط الـ Token.");
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)) throw new Error("اكتب الريبو بالشكل ده: username/repo");
+  return {token, repo};
+}
+
+$("connect").onclick = async ()=>{
+  try{
+    cfg = readForm(); setupMsg("بتحقق من الريبو…");
+    await checkRepoPrivate();
+    lsSet(LS, cfg); setupMsg(""); await openApp();
+  }catch(e){ setupMsg(e.message,"err"); }
+};
+
+$("create").onclick = async ()=>{
+  try{
+    cfg = readForm(); setupMsg("بنشئ الريبو الخاص…");
+    const name = cfg.repo.split("/")[1];
+    const r = await gh("/user/repos", {method:"POST", body:JSON.stringify({name, private:true, description:"My tasks data", auto_init:true})});
+    if(r.status===422) throw new Error("الاسم ده موجود قبل كده. دوس «اتصال» بدل الإنشاء.");
+    if(r.status===401||r.status===403) throw new Error("التوكن مالوش صلاحية إنشاء ريبو. استخدم Classic token بصلاحية repo.");
+    if(!r.ok) throw new Error("فشل الإنشاء ("+r.status+").");
+    const j = await r.json(); cfg.repo = j.full_name; $("repo").value = j.full_name;
+    lsSet(LS, cfg); setupMsg("اتعمل ريبو Private: "+j.full_name,"ok");
+    await new Promise(s=>setTimeout(s,1200)); await openApp();
+  }catch(e){ setupMsg(e.message,"err"); }
+};
+
+$("logout").onclick = ()=>{
+  if(dirty && !confirm("فيه تغييرات لسه ما اترفعتش وهتضيع لو خرجت. تكمل؟")) return;
+  if(!confirm("هتتمسح بيانات الاتصال من الجهاز ده (المهام تفضل على GitHub). متأكد؟")) return;
+  lsDel(LS); lsDel(LS_DATA); cfg=null; state={tasks:[],deleted:{}}; $("token").value=""; show("setup");
+};
+
+/* ---------- بداية التشغيل ---------- */
+(function init(){
+  cfg = lsGet(LS);
+  if(cfg && cfg.token && cfg.repo){ $("repo").value=cfg.repo; openApp(); }
+  else show("setup");
+})();
+</script>
+</body>
+</html>
