@@ -79,6 +79,17 @@ dialog{width:min(92vw,420px);border:1px solid var(--line);border-radius:20px;bac
 #pBody{width:100%;min-height:240px;resize:vertical;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--text);font:inherit;line-height:1.8}
 .tools{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tools button{min-height:38px;padding:4px 12px;font-size:.85rem}
 #pPreview{line-height:1.9}#pPreview h2,#pPreview h3{margin:12px 0 4px}.wl{color:var(--accent);cursor:pointer;text-decoration:underline}.md-li{padding-right:6px}
+#lock{position:fixed;inset:0;z-index:99;background:var(--bg);display:flex;align-items:center;justify-content:center}.lock-box{width:min(88vw,320px);text-align:center;display:grid;gap:12px}
+.bar{height:10px;border-radius:6px;background:var(--accent);min-width:3px}.bar-row{display:grid;grid-template-columns:56px 1fr;gap:10px;align-items:center;margin:10px 0}.bar-row small{color:var(--muted);display:block;margin-top:2px}
+code.cmd{display:block;direction:ltr;text-align:left;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;white-space:pre-wrap;word-break:break-all;font-size:.85rem}
+.inc{color:var(--ok)}.exp{color:var(--warn)}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}.two select,.two input{min-height:48px}
+.login-hero{text-align:center;margin:34px 0 24px}.login-mark{width:68px;height:68px;margin:0 auto 14px;border-radius:21px;display:grid;place-items:center;font-size:2rem;font-weight:700;color:var(--accent-ink);background:linear-gradient(135deg,var(--accent),#7f8cff);box-shadow:0 14px 30px var(--ring)}
+.login-hero h1{font-size:clamp(1.9rem,7vw,2.4rem);margin-bottom:6px}.login-title{margin:0 0 4px;font-size:1.2rem;font-weight:700}
+.pw{position:relative}.pw input{padding-left:78px}.pw button{position:absolute;left:6px;top:50%;transform:translateY(-50%);min-height:36px;padding:4px 12px;border:none;background:var(--surface);font-size:.82rem;color:var(--muted)}
+button.big{width:100%;min-height:52px;margin-top:20px;font-size:1.05rem;border-radius:15px}
+.help{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}.help summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--accent);list-style:none}.help summary::-webkit-details-marker{display:none}.help summary::before{content:"＋ "}.help[open] summary::before{content:"－ "}
+.help ol{margin:10px 0 0;padding-right:20px;color:var(--muted);font-size:.88rem;line-height:2}.help p{margin-top:10px}
+.trust{list-style:none;margin:20px 4px 8px;padding:0;display:grid;gap:8px;color:var(--muted);font-size:.86rem}
 [hidden]{display:none!important}@media(max-width:420px){body{padding-left:12px;padding-right:12px}.brand-mark{width:43px;height:43px;border-radius:14px}.brand-copy h1{font-size:1.5rem}.add button{min-width:75px;padding:0 12px}.due-row{flex-wrap:wrap}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -87,24 +98,46 @@ dialog{width:min(92vw,420px);border:1px solid var(--line);border-radius:20px;bac
 
 <!-- شاشة الإعداد -->
 <section id="setup" hidden>
-  <header><div class="brand"><div class="brand-mark" aria-hidden="true">✓</div><div class="brand-copy"><h1>مهامي</h1><div class="eyebrow">خطّط ليومك، وأنجز أهدافك</div></div></div></header>
-  <p class="sub">مكان بسيط وآمن لتنظيم مهامك ومتابعتها من أجهزتك.</p>
-  <div class="card">
-    <label for="token">GitHub Token</label>
-    <input id="token" type="password" autocomplete="off" placeholder="github_pat_…">
-    <p class="hint">من GitHub: Settings ← Developer settings ← Personal access tokens ← Fine-grained. اديله صلاحية <b>Contents: Read and write</b> على الريبو بس. (لو هتنشئ الريبو من هنا، استخدم Classic token بصلاحية <b>repo</b>.)</p>
-
-    <label for="repo">اسم الريبو</label>
-    <input id="repo" type="text" dir="ltr" placeholder="username/my-todo-data" autocapitalize="off" autocorrect="off">
-    <p class="hint">لو الريبو مش موجود، دوس «إنشاء ريبو خاص» وهيتعمل Private تلقائياً.</p>
-
-    <div class="row">
-      <button class="primary" id="connect">اتصال</button>
-      <button id="create">إنشاء ريبو خاص</button>
-    </div>
-    <div id="setupMsg" class="msg" role="status"></div>
-    <p class="hint">التوكن بيتحفظ على جهازك بس (في المتصفح) ومبيتبعتش لأي مكان غير GitHub.</p>
+  <div class="login-hero">
+    <div class="login-mark" aria-hidden="true">✓</div>
+    <h1>مهامي</h1>
+    <p class="sub" style="margin:0">مساحتك الخاصة للمهام والملاحظات والعادات</p>
   </div>
+  <div class="card login-card">
+    <h2 class="login-title">تسجيل الدخول</h2>
+    <p class="hint" style="margin:0 0 4px">اربط حسابك على GitHub لتتزامن بياناتك بشكل خاص بين أجهزتك.</p>
+
+    <label for="token">مفتاح GitHub</label>
+    <div class="pw">
+      <input id="token" type="password" dir="ltr" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…">
+      <button type="button" id="tokEye" aria-label="إظهار المفتاح">إظهار</button>
+    </div>
+
+    <label for="repo">ريبو البيانات</label>
+    <input id="repo" type="text" dir="ltr" placeholder="username/my-todo-data" autocapitalize="off" autocorrect="off" spellcheck="false">
+
+    <button class="primary big" id="connect" type="button">دخول</button>
+    <div id="setupMsg" class="msg" role="status" aria-live="polite"></div>
+
+    <details class="help"><summary>كيف أحصل على المفتاح؟</summary>
+      <ol>
+        <li>افتح <bdi dir="ltr">GitHub ← Settings ← Developer settings</bdi></li>
+        <li>اختار <bdi dir="ltr">Personal access tokens ← Fine-grained tokens</bdi></li>
+        <li>في <bdi dir="ltr">Repository access</bdi> اختار <bdi dir="ltr">Only select repositories</bdi> ثم ريبو البيانات</li>
+        <li>في الصلاحيات أضف <bdi dir="ltr">Contents</bdi> واجعلها <bdi dir="ltr">Read and write</bdi></li>
+        <li>اضغط <bdi dir="ltr">Generate token</bdi> وانسخ المفتاح فوراً</li>
+      </ol>
+    </details>
+    <details class="help"><summary>الريبو مش موجود؟</summary>
+      <p class="hint" style="margin:0 0 10px">يمكن إنشاؤه من هنا كريبو خاص (Private). يلزم مفتاح من نوع <bdi dir="ltr">Classic</bdi> بصلاحية <bdi dir="ltr">repo</bdi>.</p>
+      <button id="create" type="button">إنشاء ريبو خاص</button>
+    </details>
+  </div>
+  <ul class="trust">
+    <li>🔒 بياناتك في ريبو خاص على حسابك أنت</li>
+    <li>🛡 المفتاح يُحفظ على جهازك فقط ولا يُرسل لغير GitHub</li>
+    <li>☁️ تزامن تلقائي وعمل بدون إنترنت</li>
+  </ul>
 </section>
 
 <!-- شاشة المهام -->
@@ -127,6 +160,14 @@ dialog{width:min(92vw,420px);border:1px solid var(--line);border-radius:20px;bac
     <button type="button" class="view-btn" data-view="board" aria-pressed="false">🗂 لوحة</button>
     <button type="button" class="view-btn" data-view="table" aria-pressed="false">📊 جدول</button>
     <button type="button" class="view-btn" data-view="find" aria-pressed="false">🔍 بحث</button>
+  </nav>
+  <nav class="view-switch" aria-label="أقسام التطبيق">
+    <button type="button" class="view-btn" data-view="habits" aria-pressed="false">🔥 عادات</button>
+    <button type="button" class="view-btn" data-view="focus" aria-pressed="false">⏱ تركيز</button>
+    <button type="button" class="view-btn" data-view="money" aria-pressed="false">💰 مصاريف</button>
+    <button type="button" class="view-btn" data-view="cmds" aria-pressed="false">💻 أوامر</button>
+    <button type="button" class="view-btn" data-view="report" aria-pressed="false">📈 تقرير</button>
+    <button type="button" class="view-btn" data-view="tools" aria-pressed="false">⚙️ أدوات</button>
   </nav>
   <section id="todayPanel" class="today-panel">
     <div class="today-heading">
@@ -160,11 +201,35 @@ dialog{width:min(92vw,420px);border:1px solid var(--line);border-radius:20px;bac
     <button type="button" id="addSmartTasks" class="primary add-smart-tasks" hidden>＋ أضف الخطوات إلى مهامي</button>
     <p class="brain-note">النسخة الحالية تستخدم قواعد محلية ذكية، وليست نموذج محادثة متصلًا بالإنترنت. يمكن إضافة ذكاء اصطناعي متقدم لاحقًا عبر خادم آمن.</p>
   </section>
+  <section id="habitsPanel" hidden><div class="section-label">العادات</div>
+    <form id="habForm" class="filters"><input id="habName" type="text" placeholder="عادة جديدة (مثلاً: رياضة)" autocomplete="off"><button class="primary" type="submit">إضافة</button></form><div id="habList"></div></section>
+  <section id="focusPanel" hidden><div class="section-label">مؤقت التركيز (25 دقيقة)</div>
+    <select id="fTaskSel" aria-label="المهمة" style="width:100%;min-height:48px;border-radius:13px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);font:inherit;padding:0 10px"></select>
+    <div id="fClock" style="font-size:3.2rem;text-align:center;font-weight:700;margin:16px 0">25:00</div>
+    <div class="row"><button class="primary" id="fStart" type="button">ابدأ</button><button id="fReset" type="button">إعادة</button></div>
+    <div id="fInfo" class="hint" style="margin-top:12px"></div>
+    <div class="hint">سيب التطبيق مفتوح لحد ما الجلسة تخلص.</div></section>
+  <section id="moneyPanel" hidden><div class="section-label">المصاريف (الشهر الحالي)</div>
+    <form id="mForm"><div class="two"><select id="mType"><option value="out">مصروف</option><option value="in">دخل</option></select><input id="mAmt" type="number" inputmode="decimal" placeholder="المبلغ"></div>
+    <div class="filters"><input id="mNote" type="text" placeholder="ملاحظة (اختياري)" autocomplete="off"><button class="primary" type="submit">إضافة</button></div></form>
+    <div id="mSum" style="font-weight:700;margin:6px 0 12px"></div><div id="mList"></div></section>
+  <section id="cmdsPanel" hidden><div class="section-label">مكتبة الأوامر</div>
+    <form id="cForm"><input id="cTitle" type="text" placeholder="العنوان (مثلاً: عرض عناوين IP)" autocomplete="off" style="margin-bottom:8px"><input id="cCmd" type="text" dir="ltr" placeholder="الأمر" autocomplete="off" autocapitalize="off" style="margin-bottom:8px"><div class="filters"><input id="cNote" type="text" placeholder="شرح (اختياري)" autocomplete="off"><button class="primary" type="submit">حفظ</button></div></form>
+    <input id="cSearch" type="text" placeholder="🔍 ابحث في الأوامر" autocomplete="off" style="margin:8px 0"><div id="cList"></div>
+    <button id="cSeed" type="button" style="margin-top:10px">أضف أوامر Linux وشبكات شائعة</button></section>
+  <section id="reportPanel" hidden><div class="section-label">تقرير آخر 7 أيام</div><div id="repOut"></div></section>
+  <section id="toolsPanel" hidden><div class="section-label">أدوات</div>
+    <div class="row" style="flex-direction:column"><button id="bkExport" type="button">⬇️ نزّل نسخة احتياطية</button>
+    <button id="bkImportBtn" type="button">⬆️ استرجع من نسخة احتياطية</button><input id="bkImport" type="file" accept="application/json" hidden>
+    <button id="pinSet" type="button">🔒 تفعيل قفل برمز</button><button id="pinOff" type="button">🔓 إلغاء القفل</button>
+    <button id="btnNotif" type="button">🔔 تفعيل التنبيهات</button></div>
+    <div id="toolMsg" class="msg" role="status"></div>
+    <p class="hint">القفل بيمنع الفضول على الشاشة بس، مش تشفير. التنبيهات بتشتغل والتطبيق مفتوح أو شغال في الخلفية.</p></section>
   <section id="boardPanel" hidden><div class="section-label">لوحة كانبان</div><div id="boardWrap" class="board"></div></section>
   <section id="tablePanel" hidden><div class="section-label">جدول المهام (اضغط على العنوان للترتيب)</div><div id="tblWrap" class="tbl-wrap"></div></section>
   <section id="findPanel" hidden><div class="section-label">بحث في المهام والصفحات</div><input id="findInput" type="text" placeholder="اكتب كلمة…" autocomplete="off"><div id="findOut" style="margin-top:12px"></div></section>
   <section id="pagesPanel" hidden>
-    <div id="pgList"><button class="primary" id="pgNew" style="width:100%;margin-bottom:12px">＋ صفحة جديدة</button><div id="pgItems"></div></div>
+    <div id="pgList"><button class="primary" id="pgNew" style="width:100%;margin-bottom:12px">＋ صفحة جديدة</button><div class="hint">ابدأ من قالب:</div><div class="tools" id="tplRow"></div><div id="pgItems"></div></div>
     <div id="pgEditor" hidden>
       <input id="pTitle" type="text" placeholder="عنوان الصفحة" autocomplete="off" style="font-weight:700;font-size:1.1rem">
       <div class="tools" id="pTools">
@@ -226,6 +291,7 @@ dialog{width:min(92vw,420px);border:1px solid var(--line);border-radius:20px;bac
 </section>
 
 </main>
+<div id="lock" hidden><div class="lock-box"><h2>🔒 مهامي</h2><input id="lockIn" type="password" inputmode="numeric" placeholder="الرمز" autocomplete="off"><button class="primary" id="lockBtn" type="button">فتح</button><div id="lockMsg" class="msg err"></div></div></div>
 <dialog id="editDlg" aria-label="تعديل المهمة">
   <h3>تعديل المهمة</h3>
   <label for="eText">المهمة</label><input id="eText" type="text" autocomplete="off">
@@ -247,7 +313,8 @@ const LS_DATA = "todo-gh-data";
 const $ = id => document.getElementById(id);
 
 let cfg = null;                 // {token, repo}
-let state = {tasks: [], pages: [], deleted: {}};   // deleted: id -> وقت الحذف
+function emptyState(){ return {tasks:[],pages:[],habits:[],expenses:[],cmds:[],focus:[],deleted:{}}; }
+let state = emptyState();   // deleted: id -> وقت الحذف
 let dirty = false;              // فيه تغييرات لسه ما اترفعتش
 let version = 0;                // بيزيد مع كل تغيير محلي
 let filter = "all";
@@ -285,9 +352,11 @@ async function checkRepoPrivate(){
 }
 
 /* ---------- الدمج ---------- */
+const LISTS=["tasks","pages","habits","expenses","cmds","focus"];
 function norm(d){
-  const tasks = (d && d.tasks || []).map(t=>({...t, updated: t.updated || Date.parse(t.created) || 0}));
-  return {tasks, pages:(d && d.pages || []).map(p=>({...p, updated:p.updated||0})), deleted: (d && d.deleted) || {}};
+  const o={deleted:(d&&d.deleted)||{}};
+  LISTS.forEach(k=>{ o[k]=((d&&d[k])||[]).map(x=>({...x, updated:x.updated||Date.parse(x.created)||0})); });
+  return o;
 }
 function merge(a, b){
   const del = {...b.deleted};
@@ -297,11 +366,15 @@ function merge(a, b){
     [...y, ...x].forEach(t=>{ const cur = map.get(t.id); if(!cur || t.updated >= cur.updated) map.set(t.id, t); });
     return [...map.values()].filter(t => !(del[t.id] && del[t.id] >= t.updated));
   };
-  return {tasks: mergeList(a.tasks, b.tasks), pages: mergeList(a.pages||[], b.pages||[]), deleted: del};
+  const o={deleted:del};
+  LISTS.forEach(k=>{ o[k]=mergeList(a[k]||[], b[k]||[]); });
+  return o;
 }
 function canon(s){
-  const srt = a => [...a].sort((x,y)=>x.id<y.id?-1:1);
-  return JSON.stringify({t:srt(s.tasks), p:srt(s.pages||[]), d:Object.keys(s.deleted).sort().map(k=>[k,s.deleted[k]])});
+  const srt = a => [...(a||[])].sort((x,y)=>x.id<y.id?-1:1);
+  const o={d:Object.keys(s.deleted).sort().map(k=>[k,s.deleted[k]])};
+  LISTS.forEach(k=>{ o[k]=srt(s[k]); });
+  return JSON.stringify(o);
 }
 
 /* ---------- المزامنة ---------- */
@@ -333,7 +406,7 @@ async function sync(){
       if(needPush){
         const body = {
           message: "update tasks · "+new Date().toISOString(),
-          content: enc(JSON.stringify({tasks:state.tasks, pages:state.pages, deleted:state.deleted, updated:new Date().toISOString()}, null, 2))
+          content: enc(JSON.stringify({...state, updated:new Date().toISOString()}, null, 2))
         };
         if(remote.sha) body.sha = remote.sha;
         const r = await gh("/repos/"+cfg.repo+"/contents/"+FILE, {method:"PUT", body:JSON.stringify(body)});
@@ -424,6 +497,7 @@ function render(){
   if(currentView==="board") renderBoard();
   if(currentView==="table") renderTable();
   if(currentView==="pages" && !curPage) renderPages();
+  renderExtra();
 }
 
 $("addForm").addEventListener("submit", ()=>{
@@ -452,7 +526,7 @@ function addDays(str, n){
 }
 function toggleDone(t, checked){
   change(()=>{
-    t.done=checked; t.status=checked?"done":"todo"; t.updated=Date.now();
+    t.done=checked; t.status=checked?"done":"todo"; t.updated=Date.now(); if(checked) t.doneAt=Date.now();
     if(checked && t.repeat && t.repeat!=="none"){
       const today=localDateString();
       const base=(t.due && t.due>today)?t.due:today;
@@ -523,8 +597,8 @@ function renderPages(){
   if(!state.pages.length) l.textContent="مفيش صفحات لسه. اضغط «صفحة جديدة».";
 }
 function openPage(id){ curPage=id; preview=false; setView("pages"); renderPages(); }
-function newPage(title){
-  const now=Date.now(), p={id:"p"+now.toString(36)+Math.random().toString(36).slice(2,5),title:title||"",body:"",created:new Date(now).toISOString(),updated:now};
+function newPage(title,body){
+  const now=Date.now(), p={id:"p"+now.toString(36)+Math.random().toString(36).slice(2,5),title:title||"",body:body||"",created:new Date(now).toISOString(),updated:now};
   change(()=>state.pages.unshift(p)); openPage(p.id);
 }
 function openByTitle(t){ const p=state.pages.find(x=>(x.title||"").trim().toLowerCase()===t.trim().toLowerCase()); p?openPage(p.id):newPage(t); }
@@ -581,6 +655,141 @@ document.querySelectorAll("[data-ins]").forEach(b=>b.onclick=()=>{
   else { const ls=ta.value.lastIndexOf("\n",st-1)+1; ta.setRangeText(v,ls,ls,"preserve"); }
   ta.focus(); queueSave();
 });
+
+/* ---------- أدوات إضافية ---------- */
+const newId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+function delItem(list,id){ change(()=>{ state[list]=state[list].filter(x=>x.id!==id); state.deleted[id]=Date.now(); }); }
+const dayStr=i=>localDateString(new Date(Date.now()-i*864e5));
+function showNote(body){
+  if(!("Notification" in window)||Notification.permission!=="granted") return;
+  const fb=()=>{ try{ new Notification("مهامي",{body}); }catch(e){} };
+  if(navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then(r=>r.showNotification("مهامي",{body,icon:"icon-192.png"})).catch(fb); else fb();
+}
+function renderExtra(){ ({habits:renderHabits,focus:renderFocus,money:renderMoney,cmds:renderCmds,report:renderReport}[currentView]||(()=>{}))(); }
+
+/* عادات */
+function streak(h){ let n=0; const d=new Date(); if(!h.days[localDateString(d)]) d.setDate(d.getDate()-1); while(h.days[localDateString(d)]){ n++; d.setDate(d.getDate()-1); } return n; }
+function toggleHabit(h){ change(()=>{ const k=localDateString(); if(h.days[k]) delete h.days[k]; else h.days[k]=1; h.updated=Date.now(); }); }
+function renderHabits(){
+  const l=$("habList"); l.innerHTML=""; const today=localDateString();
+  state.habits.forEach(h=>{
+    const c=el("div",null,"card2"), top=el("div"); top.style.cssText="display:flex;justify-content:space-between;gap:8px";
+    top.appendChild(el("b",h.name)); top.appendChild(el("span","🔥 "+streak(h)+" يوم")); c.appendChild(top);
+    const dots=el("div",[6,5,4,3,2,1,0].map(i=>h.days[dayStr(i)]?"●":"○").join(" ")); dots.style.cssText="margin:8px 0;letter-spacing:3px"; c.appendChild(dots);
+    const a=el("div",null,"acts"), b=el("button",h.days[today]?"✓ اتعملت النهارده":"علّم النهارده"); if(h.days[today]) b.className="primary";
+    b.onclick=()=>toggleHabit(h); const x=el("button","حذف"); x.onclick=()=>{ if(confirm("حذف العادة؟")) delItem("habits",h.id); };
+    a.append(b,x); c.appendChild(a); l.appendChild(c);
+  });
+  if(!state.habits.length) l.textContent="مفيش عادات لسه.";
+}
+$("habForm").addEventListener("submit",e=>{ e.preventDefault(); const n=$("habName").value.trim(); if(!n) return;
+  change(()=>state.habits.unshift({id:newId("h"),name:n,days:{},created:new Date().toISOString(),updated:Date.now()})); $("habName").value=""; });
+
+/* تركيز */
+const FMIN=25*60000; let fEnd=null, fLeft=FMIN;
+const fmt=ms=>{ const s=Math.max(0,Math.ceil(ms/1000)); return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); };
+function renderFocus(){
+  const sel=$("fTaskSel"), cur=sel.value; sel.innerHTML=""; const o0=el("option","(من غير مهمة)"); o0.value=""; sel.appendChild(o0);
+  state.tasks.filter(t=>!t.done).forEach(t=>{ const o=el("option",t.text); o.value=t.id; sel.appendChild(o); }); sel.value=cur;
+  $("fClock").textContent=fmt(fEnd?fEnd-Date.now():fLeft);
+  $("fStart").textContent=fEnd?"إيقاف مؤقت":(fLeft<FMIN?"استكمال":"ابدأ");
+  const today=localDateString(); $("fInfo").textContent="جلسات النهارده: "+state.focus.filter(f=>localDateString(new Date(f.updated))===today).length;
+}
+function finishFocus(){
+  fEnd=null; fLeft=FMIN; const t=state.tasks.find(x=>x.id===$("fTaskSel").value);
+  change(()=>state.focus.unshift({id:newId("f"),task:t?t.text:"",min:25,updated:Date.now()}));
+  if(navigator.vibrate) navigator.vibrate([300,150,300]); showNote("خلصت جلسة التركيز 🎯"); renderFocus();
+}
+setInterval(()=>{ if(!fEnd) return; const left=fEnd-Date.now(); if(left<=0) finishFocus(); else if(currentView==="focus") $("fClock").textContent=fmt(left); },500);
+$("fStart").onclick=()=>{ if(fEnd){ fLeft=fEnd-Date.now(); fEnd=null; } else fEnd=Date.now()+fLeft; renderFocus(); };
+$("fReset").onclick=()=>{ fEnd=null; fLeft=FMIN; renderFocus(); };
+
+/* مصاريف */
+function renderMoney(){
+  const ym=localDateString().slice(0,7), rows=state.expenses.filter(e=>(e.date||"").startsWith(ym)).sort((a,b)=>b.updated-a.updated);
+  const sum=t=>rows.filter(e=>e.type===t).reduce((n,e)=>n+e.amount,0), inn=sum("in"), out=sum("out");
+  $("mSum").textContent="دخل: "+inn+"  |  مصروف: "+out+"  |  الباقي: "+(inn-out);
+  const l=$("mList"); l.innerHTML="";
+  rows.forEach(e=>{ const c=el("div",null,"card2"); c.style.cssText="display:flex;justify-content:space-between;align-items:center;gap:8px";
+    c.appendChild(el("span",(e.note||(e.type==="in"?"دخل":"مصروف"))+" · "+e.date));
+    const a=el("span",(e.type==="in"?"+":"-")+e.amount,e.type==="in"?"inc":"exp"), x=el("button","×"); x.onclick=()=>delItem("expenses",e.id);
+    c.append(a,x); l.appendChild(c); });
+  if(!rows.length) l.textContent="مفيش حركات الشهر ده.";
+}
+$("mForm").addEventListener("submit",e=>{ e.preventDefault(); const amt=parseFloat($("mAmt").value); if(!(amt>0)) return;
+  change(()=>state.expenses.unshift({id:newId("m"),type:$("mType").value,amount:amt,note:$("mNote").value.trim(),date:localDateString(),updated:Date.now()})); $("mAmt").value=""; $("mNote").value=""; });
+
+/* أوامر */
+function renderCmds(){
+  const q=$("cSearch").value.trim().toLowerCase(), l=$("cList"); l.innerHTML="";
+  state.cmds.filter(c=>!q||((c.title||"")+" "+(c.cmd||"")+" "+(c.note||"")).toLowerCase().includes(q)).forEach(c=>{
+    const card=el("div",null,"card2"); card.appendChild(el("b",c.title)); card.appendChild(el("code",c.cmd,"cmd"));
+    if(c.note) card.appendChild(el("div",c.note,"d"));
+    const a=el("div",null,"acts"), cp=el("button","نسخ");
+    cp.onclick=()=>{ (navigator.clipboard?navigator.clipboard.writeText(c.cmd):Promise.reject()).then(()=>{cp.textContent="اتنسخ ✓";}).catch(()=>{cp.textContent="انسخه يدوي";}); };
+    const x=el("button","حذف"); x.onclick=()=>{ if(confirm("حذف الأمر؟")) delItem("cmds",c.id); }; a.append(cp,x); card.appendChild(a); l.appendChild(card);
+  });
+  if(!state.cmds.length) l.textContent="مفيش أوامر لسه.";
+}
+$("cForm").addEventListener("submit",e=>{ e.preventDefault(); const t=$("cTitle").value.trim(), c=$("cCmd").value.trim(); if(!t||!c) return;
+  change(()=>state.cmds.unshift({id:newId("c"),title:t,cmd:c,note:$("cNote").value.trim(),created:new Date().toISOString(),updated:Date.now()})); $("cTitle").value=$("cCmd").value=$("cNote").value=""; });
+$("cSearch").addEventListener("input",renderCmds);
+const SEED=[["عرض عناوين IP","ip a"],["جدول التوجيه","ip route"],["فحص الاتصال","ping -c 4 8.8.8.8"],["تتبع المسار","traceroute 8.8.8.8"],["المنافذ المفتوحة","ss -tulnp"],["فحص DNS","dig example.com"],["مساحة القرص","df -h"],["أكتر العمليات استهلاكاً للذاكرة","ps aux --sort=-%mem | head"],["سجل خدمة","journalctl -u SERVICE -e"]];
+$("cSeed").onclick=()=>change(()=>SEED.forEach(([t,c])=>{ if(!state.cmds.some(x=>x.cmd===c)) state.cmds.push({id:newId("c"),title:t,cmd:c,note:"",created:new Date().toISOString(),updated:Date.now()}); }));
+
+/* تقرير */
+function renderReport(){
+  const out=$("repOut"); out.innerHTML=""; const dayOf=ts=>localDateString(new Date(ts));
+  const rows=[6,5,4,3,2,1,0].map(i=>{ const d=dayStr(i); return {d,
+    t:state.tasks.filter(t=>t.done&&dayOf(t.doneAt||t.updated)===d).length,
+    h:state.habits.reduce((n,h)=>n+(h.days[d]?1:0),0),
+    f:state.focus.filter(f=>dayOf(f.updated)===d).length}; });
+  const max=Math.max(1,...rows.map(r=>r.t));
+  rows.forEach(r=>{ const [y,m,dd]=r.d.split("-").map(Number), row=el("div",null,"bar-row");
+    row.appendChild(el("span",new Date(y,m-1,dd).toLocaleDateString("ar",{weekday:"short"})));
+    const box=el("div"), b=el("div",null,"bar"); b.style.width=(r.t/max*100)+"%"; box.appendChild(b);
+    box.appendChild(el("small","مهام "+r.t+" · عادات "+r.h+" · تركيز "+r.f)); row.appendChild(box); out.appendChild(row); });
+  const tot=k=>rows.reduce((n,r)=>n+r[k],0);
+  out.appendChild(el("p","الإجمالي: "+tot("t")+" مهمة، "+tot("h")+" عادة، "+tot("f")+" جلسة تركيز."));
+}
+
+/* قوالب */
+const TPL={
+ "يومية":()=>["يومية "+localDateString(),"# أهم 3 حاجات\n- [ ] \n- [ ] \n- [ ] \n\n## ملاحظات\n\n## اتعلمت إيه النهارده؟\n"],
+ "اجتماع":()=>["اجتماع","# اجتماع\n\n## الحضور\n- \n\n## النقاط\n- \n\n## القرارات\n- \n\n## المطلوب\n- [ ] \n"],
+ "أسبوع":()=>["خطة الأسبوع","# الأهداف\n- [ ] \n- [ ] \n\n## السبت\n- \n## الأحد\n- \n## الاتنين\n- \n## التلات\n- \n## الأربع\n- \n## الخميس\n- \n## الجمعة\n- \n"],
+ "سيرفر Linux":()=>["قايمة إعداد سيرفر Linux","# إعداد سيرفر Linux\n- [ ] تحديث النظام\n- [ ] إنشاء مستخدم غير root\n- [ ] تعطيل دخول root عبر SSH\n- [ ] استخدام مفاتيح SSH بدل الباسورد\n- [ ] تفعيل الجدار الناري (ufw)\n- [ ] مراجعة المنافذ المفتوحة\n- [ ] تفعيل التحديثات الأمنية التلقائية\n- [ ] إعداد نسخ احتياطي\n- [ ] مراجعة السجلات\n"],
+ "شبكة":()=>["قايمة إعداد شبكة","# إعداد شبكة\n- [ ] تغيير باسورد الراوتر الافتراضي\n- [ ] تحديث فيرموير الراوتر\n- [ ] تشفير WPA2 أو WPA3\n- [ ] تعطيل WPS\n- [ ] شبكة منفصلة للضيوف\n- [ ] تثبيت IP للأجهزة المهمة\n- [ ] ضبط DNS\n- [ ] فحص المنافذ المفتوحة\n- [ ] حفظ نسخة من إعدادات الراوتر\n"]
+};
+Object.keys(TPL).forEach(k=>{ const b=el("button","＋ "+k); b.onclick=()=>{ const [t,body]=TPL[k](); newPage(t,body); }; $("tplRow").appendChild(b); });
+
+/* أدوات: نسخ احتياطي، قفل، تنبيهات */
+const PIN_KEY="todo-gh-pin";
+function toolMsg(t,err){ const m=$("toolMsg"); m.textContent=t; m.className="msg "+(err?"err":"ok"); }
+$("bkExport").onclick=()=>{
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:"application/json"}));
+  a.download="mahami-backup-"+localDateString()+".json"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),3000); toolMsg("اتنزّلت النسخة الاحتياطية.");
+};
+$("bkImportBtn").onclick=()=>$("bkImport").click();
+$("bkImport").onchange=async e=>{ const f=e.target.files[0]; if(!f) return;
+  try{ const d=norm(JSON.parse(await f.text())); change(()=>{ state=merge(state,d); }); toolMsg("اتدمجت النسخة مع بياناتك."); }catch(err){ toolMsg("الملف مش صالح.",true); }
+  e.target.value=""; };
+async function sha(x){ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("mahami:"+x)); return [...new Uint8Array(b)].map(v=>v.toString(16).padStart(2,"0")).join(""); }
+function lockIfNeeded(){ if(lsGet(PIN_KEY)){ $("lock").hidden=false; $("lockIn").value=""; $("lockMsg").textContent=""; setTimeout(()=>$("lockIn").focus(),50); } }
+$("lockBtn").onclick=async()=>{ if(await sha($("lockIn").value)===lsGet(PIN_KEY)) $("lock").hidden=true; else $("lockMsg").textContent="الرمز غلط"; };
+$("lockIn").addEventListener("keydown",e=>{ if(e.key==="Enter") $("lockBtn").click(); });
+$("pinSet").onclick=async()=>{ const p=prompt("اكتب الرمز الجديد"); if(p){ lsSet(PIN_KEY,await sha(p)); toolMsg("اتفعّل القفل."); } };
+$("pinOff").onclick=()=>{ if(confirm("إلغاء القفل؟")){ lsDel(PIN_KEY); toolMsg("اتلغى القفل."); } };
+let hiddenAt=0; document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") hiddenAt=Date.now(); else if(hiddenAt && Date.now()-hiddenAt>60000) lockIfNeeded(); });
+$("btnNotif").onclick=async()=>{ if(!("Notification" in window)) return toolMsg("المتصفح ده مش بيدعم التنبيهات.",true);
+  const r=await Notification.requestPermission(); toolMsg(r==="granted"?"اتفعّلت التنبيهات.":"التنبيهات مرفوضة من إعدادات المتصفح.",r!=="granted"); };
+function notifyDue(){
+  if(!("Notification" in window)||Notification.permission!=="granted") return;
+  const today=localDateString(); if(lsGet("todo-gh-notified")===today) return;
+  const n=state.tasks.filter(t=>!t.done&&t.due&&t.due<=today).length;
+  if(n){ showNote("عندك "+n+" مهمة النهارده أو متأخرة"); lsSet("todo-gh-notified",today); }
+}
+setInterval(notifyDue,60000); setTimeout(notifyDue,5000);
 
 /* ---------- بحث شامل ---------- */
 function renderFind(){
@@ -655,7 +864,7 @@ function renderToday(){
     row.append(cb,title,meta);list.appendChild(row);
   });
 }
-const PANELS={today:"todayPanel",tasks:"tasksPanel",brain:"brainPanel",board:"boardPanel",table:"tablePanel",pages:"pagesPanel",find:"findPanel"};
+const PANELS={today:"todayPanel",tasks:"tasksPanel",brain:"brainPanel",board:"boardPanel",table:"tablePanel",pages:"pagesPanel",find:"findPanel",habits:"habitsPanel",focus:"focusPanel",money:"moneyPanel",cmds:"cmdsPanel",report:"reportPanel",tools:"toolsPanel"};
 function setView(view){
   currentView=view;
   for(const [v,id] of Object.entries(PANELS)) $(id).hidden=v!==view;
@@ -663,7 +872,7 @@ function setView(view){
     const active=b.dataset.view===view;
     b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));
   });
-  if(view==="board")renderBoard(); if(view==="table")renderTable(); if(view==="pages")renderPages(); if(view==="find")renderFind();
+  if(view==="board")renderBoard(); if(view==="table")renderTable(); if(view==="pages")renderPages(); if(view==="find")renderFind(); renderExtra();
 }
 document.querySelectorAll(".view-btn").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
 $("showAllTasks").addEventListener("click",()=>setView("tasks"));
@@ -773,7 +982,7 @@ async function openApp(){
   show("app"); $("repoName").textContent = cfg.repo;
   const c = lsGet(LS_DATA);
   if(c && c.repo===cfg.repo){ state = norm(c.state); state.deleted = c.state.deleted||{}; dirty = !!c.dirty; }
-  else { state = {tasks:[], pages:[], deleted:{}}; dirty = false; }
+  else { state = emptyState(); dirty = false; }
   render();
   renderToday();
   setView(currentView);
@@ -813,14 +1022,27 @@ $("create").onclick = async ()=>{
 $("logout").onclick = ()=>{
   if(dirty && !confirm("فيه تغييرات لسه ما اترفعتش وهتضيع لو خرجت. تكمل؟")) return;
   if(!confirm("هتتمسح بيانات الاتصال من الجهاز ده (المهام تفضل على GitHub). متأكد؟")) return;
-  lsDel(LS); lsDel(LS_DATA); cfg=null; state={tasks:[],pages:[],deleted:{}}; $("token").value=""; show("setup");
+  lsDel(LS); lsDel(LS_DATA); cfg=null; state=emptyState(); $("token").value=""; show("setup");
 };
 
 /* ---------- تثبيت كتطبيق (PWA) ---------- */
 if("serviceWorker" in navigator){ window.addEventListener("load",()=>{ try{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }catch(e){} }); }
 
+/* ---------- تحسينات شاشة الدخول ---------- */
+function setBusy(on){
+  ["connect","create"].forEach(id=>{ $(id).disabled=on; });
+  $("connect").textContent = on ? "جاري التحقق…" : "دخول";
+}
+["connect","create"].forEach(id=>{
+  const orig=$(id).onclick;
+  $(id).onclick=async()=>{ setBusy(true); try{ await orig(); } finally{ setBusy(false); } };
+});
+$("tokEye").onclick=()=>{ const t=$("token"), show=t.type==="password"; t.type=show?"text":"password"; $("tokEye").textContent=show?"إخفاء":"إظهار"; };
+["token","repo"].forEach(id=>$(id).addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); $("connect").click(); } }));
+
 /* ---------- بداية التشغيل ---------- */
 (function init(){
+  lockIfNeeded();
   cfg = lsGet(LS);
   if(cfg && cfg.token && cfg.repo){ $("repo").value=cfg.repo; openApp(); }
   else show("setup");
